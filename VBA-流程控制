@@ -1,0 +1,106 @@
+1. If/ElseIf/Else
+Sub testif()
+Dim i&
+'提示语-title-默认值
+i = InputBox("Please input your score:", "Score", 60)
+If i > 90 Then
+MsgBox "Your credit is A"
+ElseIf i > 80 Then
+MsgBox "Your credit is B"
+ElseIf i > 70 Then
+MsgBox "Your credit is C"
+ElseIf i > 60 Then
+MsgBox "Your credit is D"
+Else
+MsgBox "Your credit is E"
+End If
+End Sub
+
+2. Select/Case/Is/Else
+Sub testselectcase()
+'Sheets对象包括workSheets对象和一些图表
+Application.Workbooks("1.xlsx").Sheets("Sheet2").Select
+Select Case ActiveSheet.Cells(1, 1).Value
+Case Is < 60
+MsgBox "bad"
+Case Is < 70
+MsgBox "So so"
+Case Is < 80
+MsgBox "good"
+Case Is < 90
+MsgBox "very good"
+Case Else
+MsgBox "excellent"
+End Select
+End Sub
+
+3. For/To/Step/Next
+'最简单的for循环
+Sub testfor1()
+Dim i&, total&
+total = 0
+For i = 1 To 1000 Step 1
+total = total + i
+Next
+MsgBox "total: " & total
+total = 0
+For i = 1000 To 1 Step -2
+total = total + i
+Next
+MsgBox "total: " & CStr(total)
+End Sub
+
+4. For Each In
+'for each循环
+Sub testfor2()
+Dim sh As Worksheet
+For Each sh In ActiveWorkbook.Worksheets
+MsgBox sh.nameNext
+End Sub
+
+5. Do/While/Loop
+'do while循环
+Sub testdowhile()
+Dim i&, total&i = 1000
+total = 0
+Do While i > 0
+total = total + i
+i = i - 1
+Loop
+MsgBox total
+End Sub
+
+6. Do/Loop/Until
+'do until循环
+Sub testdountil()
+Dim i&, total&
+i = 1000
+total = 0
+Do
+total = total + i
+i = i - 1
+Loop Until i < 0
+MsgBox total
+End Sub
+
+
+with语法是为了减轻程序输入负担, 在with范围类, 默认的当前对象就是with指定的对象, 如下程序 with指定了font, 则下面的.Name .FontStyle等都是指Range("A1").font的成员,类似于流操作
+Public Sub testwith()
+With Range("A1").Font   
+.name = "华文彩云"   
+.FontStyle = "Bold"   
+.Size = 18   
+.ColorIndex = 3   
+.Underline = 2
+End With
+End Sub
+
+vba程序的基本单元是行, 如果要换行, 需用符号"_"来处理
+'VBA换行Sub testline()
+Dim s As String
+s = "12345" & _
+"67890"
+MsgBox s
+MsgBox ActiveWorkbook.Worksheets(1) _
+.Range("A1").Value
+End Sub
