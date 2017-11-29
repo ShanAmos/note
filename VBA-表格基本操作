@@ -1,0 +1,124 @@
+1.遍历/选中/增加/删除 worksheet
+Sub test10()
+Dim sh As Worksheet
+'遍历worksheet
+For Each sh In ActiveWorkbook.Worksheets
+If sh.name = "Sheet1" Then
+sh.Range("A1").Value = "Haha"
+End If
+Next
+Sheets("Sheet1").Select
+ActiveSheet.Range("A1").Value = "Hello"
+'在当前活动sheet前添加一个新sheet
+ActiveWorkbook.Worksheets.Add ActiveSheet
+'新sheet会成为活动sheet,给它一个名字
+ActiveSheet.name = "New sheet1"
+ActiveWorkbook.Worksheets.Add ActiveSheet
+ActiveSheet.name = "New sheet2"
+'因为删除sheet会弹出警告消息,所以先禁止警告消息
+Application.DisplayAlerts = False
+ActiveWorkbook.Worksheets(2).Delete
+'恢复警告消息
+Application.DisplayAlerts = True
+End Sub
+
+2. 单元格复制/粘贴，行列删除等操作
+Sub test11()
+'A1的值拷贝到A2
+Range("A1").Copy Range("A2")
+'A1的值拷贝到A2~A10（跨多行）
+Range("A1").Copy Range("A2:A10")
+'B1~D1区域拷贝到B2到D10区域
+Range("B1:D1").Copy Range("B2:D10")
+'一个sheet的A1~E1区域整体拷贝到另一个sheet的A1~E1区域
+ActiveWorkbook.Sheets("Sheet1").Range("A1:E1").Copy Sheets("Sheet2").Range("A1:E1")
+'除了通过range，也可以通过cell来拷贝，A1拷贝到K11
+Sheets("Sheet1").Cells(1, 1).Copy Sheets("Sheet1").Cells(11, 11)
+'也可以这样引用一个
+range[a1:e1].Copy [g1:k1]
+'可以通过单元格获取它所在的行然后执行
+'整行复制
+[A1].EntireRow.Copy [A11].EntireRow
+'整列复制
+[A1].EntireColumn.Copy [F1].EntireColumn
+'整行删除
+[A2].EntireRow.Delete
+'整列删除
+[g1].EntireColumn.Delete
+'a1~a10剪切到a20,顺序粘贴
+[a1:a10].Cut [a20]
+End Sub
+
+3. 获得某行最大使用列数, 某列最大使用行数, 整个sheet的最大行数,列数:
+Sub test12()
+'第A列最大使用行数
+MsgBox [a65536].End(xlUp).Row
+'第B列最大使用行数
+MsgBox [b65536].End(xlUp).Row
+'第一行最大使用列数
+MsgBox [iv1].End(xlToLeft).Column
+'第二行最大使用列数
+MsgBox [iv2].End(xlToLeft).Column
+'整个sheet最大使用行数
+MsgBox ActiveSheet.UsedRange.Rows.Count
+'整个sheet最大使用列数
+MsgBox ActiveSheet.UsedRange.Columns.Count
+End Sub
+
+4. 把一个sheet某一列的值考到以该值命名的其他sheet中去
+Sub classify()    
+Dim maxrow1&, maxrow2&, i&    
+Dim cls As String    
+Dim sh As Worksheet    
+starttime = Timer    
+maxrow1 = [a65536].End(xlUp).Row    
+For i = maxrow1 To 2 Step -1        
+'MsgBox Sheets("students").Name        
+cls = Sheets("students").Cells(i, 4).Value        
+MsgBox cls        
+maxrow2 = Sheets(cls).[a65536].End(xlUp).Row + 1        
+Sheets("Students").Cells(i, 3).EntireRow.Copy Sheets(cls).Cells(maxrow2, 1).EntireRow    
+Next    
+MsgBox "Total time used: " & Timer - starttime & " second(s)"
+End Sub
+
+5. 自定义form，动态生成数据
+Private Sub Workbook_Open()
+'UserForm1是这个自定义form的名字    
+UserForm1.Show
+End Sub
+
+'自动调用，根据上面选择
+Private Sub UserForm_Initialize()    
+s_class.AddItem ("三一班")    
+s_class.AddItem ("三二班")    
+s_class.AddItem ("三三班")
+End Sub
+
+Private Sub save_Click()    
+'s_name,s_age,s_class对应自定义form的控件名    
+Dim maxrow&    
+Dim id&    
+If s_name.Value = "" Then        
+MsgBox "Name is required."        
+Exit Sub    
+End If    
+If s_age.Value = "" Then        
+MsgBox "Age is required."        
+Exit Sub    
+End If    
+If IsNumeric(s_age.Value) = False Then        
+MsgBox "Age should be a number."        
+Exit Sub    
+End If    
+maxrow = ActiveWorkbook.Worksheets("Students").[a65536].End(xlUp).Row + 1    
+If IsNumeric(ActiveWorkbook.Worksheets("Students").Cells(maxrow - 1, 1).Value) = False Then        
+id = 1    
+Else        
+id = ActiveWorkbook.Worksheets("Students").Cells(maxrow - 1, 1).Value + 1    
+End If    
+ActiveWorkbook.Worksheets("Students").Cells(maxrow, 1) = id    
+ActiveWorkbook.Worksheets("Students").Cells(maxrow, 2) = s_name.Value    
+ActiveWorkbook.Worksheets("Students").Cells(maxrow, 3) = s_age.Value    
+ActiveWorkbook.Worksheets("Students").Cells(maxrow, 4) = s_class.Value
+End Sub
