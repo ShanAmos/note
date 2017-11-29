@@ -1,0 +1,28 @@
+ VBA基础：
+ VBA对象模型经常用到的无非这四五个:application -> workbooks -> worksheets -> range ->cells. application处于最顶上,表示正在运行的程序(Excel)本身. workbook工作薄, 即一个excel文件单元, 对应着一个xls文件. worksheet是工作表, 新建一个workbook里面默认包含了3个worksheet; range表示工作表中的一块区域, 比如Range("A1:D10")表示A1:D10之间的那块区域, 一个range包含多个Cell,一个cell即worksheet中的一个小格子
+
+使用示例：
+Sub test()
+'去读本文件的单元格的内容
+MsgBox Application.Workbooks("test.xlsx").Worksheets("Sheet1").Range("A1").Value
+'如果是当前的application,则application可以省略
+MsgBox Workbooks("test.xlsx").Worksheets("Sheet1").Range("A1").Value
+'如果是当前workbooks,则workbooks可以省略
+MsgBox Worksheets("Sheet1").Range("A1").Value
+'如果是当前的sheet,则worksheet可以省略
+MsgBox Range("A1").Value
+'还可以这么用
+MsgBox Sheets("Sheet1").Range("A1").Value
+'ActiveWorkbook代表当前活动的workbook
+'这样就更直接了
+MsgBox Cells(1, 1).Value
+'也可以改写cell的value
+Cells(2, 2).Value = "111我在学vba"
+MsgBox ActiveWorkbook.Worksheets(1).Range("A1").Value
+'还可以这么用
+MsgBox ThisWorkbook.Worksheets(1).Range("A1").Value
+'也可读取外部xls文件的内容
+MsgBox Application.Workbooks("1.xlsx").Worksheets("Sheet1").Range("A1").Value
+'也可以通过下标应用对象
+MsgBox Application.Workbooks(2).Worksheets(1).Range("A1").Value
+End Sub
