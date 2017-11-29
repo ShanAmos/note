@@ -1,7 +1,7 @@
  VBA基础：
  VBA对象模型经常用到的无非这四五个:application -> workbooks -> worksheets -> range ->cells. application处于最顶上,表示正在运行的程序(Excel)本身. workbook工作薄, 即一个excel文件单元, 对应着一个xls文件. worksheet是工作表, 新建一个workbook里面默认包含了3个worksheet; range表示工作表中的一块区域, 比如Range("A1:D10")表示A1:D10之间的那块区域, 一个range包含多个Cell,一个cell即worksheet中的一个小格子
 
-使用示例：
+使用示例：在test.xlsx上编写脚本，可以来操作新建的1.xlsx上的数据
 Sub test()
 '去读本文件的单元格的内容
 MsgBox Application.Workbooks("test.xlsx").Worksheets("Sheet1").Range("A1").Value
@@ -26,3 +26,26 @@ MsgBox Application.Workbooks("1.xlsx").Worksheets("Sheet1").Range("A1").Value
 '也可以通过下标应用对象
 MsgBox Application.Workbooks(2).Worksheets(1).Range("A1").Value
 End Sub
+
+==================================================================
+每个对象的属性操作
+
+Sub test1()
+MsgBox Application.Name
+MsgBox Application.Workbooks(2).Name
+MsgBox Worksheets.Count
+MsgBox "There are " & CStr(Range("A1:D10").Cells.Count) & " Cells"
+Sheets(2).Select
+ActiveSheet.Cells(1, 1).Value = "This is the first cell in Sheet2"
+ActiveSheet.Cells(2, 1).Value = "This"
+ActiveSheet.Cells(3, 1).Value = "Sheet2"
+Range("A2").Font.FontStyle = "Bold"
+Range("A2").Font.Size = 13
+Range("A3").Borders.LineStyle = xlContinuous
+Range("A3").Borders.Weight = xlThin
+End Sub
+
+
+
+
+
