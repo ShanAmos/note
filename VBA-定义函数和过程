@@ -1,0 +1,45 @@
+1. 无参数的函数和过程调用
+Sub test3()
+MsgBox Application.name
+MsgBox Worksheets.Count
+ActiveSheet.Cells(1, 1).Value = "This is the first cell in Sheet2"
+End Sub
+
+Sub test4()
+'test3是上面定义的函数
+test3
+'input是一个系统过程
+Dim name As String
+name = InputBox("Please input your name:")
+MsgBox "Your name is:" & name
+End Sub
+
+2. 传引用函数
+'传引用调用
+Sub test5()
+Dim i As Integer
+i = 123
+test6 i
+'输出321
+MsgBox i
+End Sub
+
+Sub test6(ByRef i As Integer)
+i = 321
+MsgBox i
+End Sub
+
+3 传值调用函数
+'传值调用
+Sub test7()
+Dim i As Integer
+i = 123
+test8 i
+'输出123
+MsgBox i
+End Sub
+
+Sub test8(ByVal i As Integer)
+i = 321
+MsgBox i
+End Sub
