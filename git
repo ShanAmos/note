@@ -1,0 +1,41 @@
+git命令
+1. 使用git bash创建一个目录（命令同linux）,然后进入这个目录中执行git init。当前这个目录即变成git可以管理的仓库（隐藏了一个.git文件。通过ls -ah查看）
+2. 创建一个文件 readme.txt，执行命令
+git add readme.txt
+git commit -m "append GPL"
+将修改提交到本地目录（add命令类似于选中某个文件，commit -m是提交，并写备注）
+3. 查看提交记录
+git log --pretty=oneline
+输出的前面一大串是commit id
+4. 回退版本（HEAD指的是当前版本）
+git reset --hard HEAD~100 回退100步
+或者 git reset --hard commitId 回退到指定版本
+5. 恢复到新版本
+git reflog 查看每一次的操作记录，然后再reset到指定的commitId即可
+
+工作区和暂存区
+工作区：就是git init的那个文件夹
+工作区的.git隐藏目录：叫git版本库，里面有个index文件，称为暂存区
+第一步是用git add把文件添加进去，实际上就是把文件修改添加到暂存区
+第二步是用git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支。
+git status命令查看每一步执行的状态
+git diff HEAD -- readme.txt命令可以查看工作区和版本库里面最新版本的区别：
+
+撤销修改（log和reflog都不会再有记录）
+1. 还没有add，也就是还在工作区没有到暂存区：
+执行git checkout -- readme.txt：丢弃工作区的修改，回到最近一次commit或add的状态
+2. 已经add，也就是已经到了暂存区：
+git reset HEAD readme.txt可以把暂存区的修改撤销掉（unstage），重新放回工作区
+然后git checkout -- readme.txt 再丢弃工作区的修改
+3. 已经commit, 也就是已经提交到了本地版本库，这时只能参考上面回退版本
+4. 已经push到远程仓库，无法撤回了
+
+删除文件
+1. 确定要删除
+git rm test.txt
+git commit -m "remove test.txt"
+2. 误删除
+git checkout -- test.txt：checkout其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”
+
+添加远程仓库
+
