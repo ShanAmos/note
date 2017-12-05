@@ -8,7 +8,8 @@ $ ssh-keygen -t rsa -C “XXX@XXX.com” 指定密码和密钥的目录
 生成后会在用户目录下生成.ssh文件，里面包含两个文件：id_rsa和id_rsa.pub
 3. 添加ssh密钥
 输入ssh-add ~/.ssh/id_rsa
-4. github上设置公钥（id_rsa.pub）
+4. 用vim复制public key的内容 vim ~/.ssh/id_rsa.pub 并复制到github
+5. 输入ssh -T git@gitub.com测试
 
 git命令
 1. 使用git bash创建一个目录（命令同linux）,然后进入这个目录中执行git init。当前这个目录即变成git可以管理的仓库（隐藏了一个.git文件。通过ls -ah查看）
@@ -50,4 +51,18 @@ git commit -m "remove test.txt"
 git checkout -- test.txt：checkout其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”
 
 添加远程仓库（github上先创建仓库，并配置好ssh）
-git remote add origin git@github.com:XXX/learngit.git (origin是远程仓库名称)
+git remote add origin git@github.com:XXX/learngit.git (origin是远程仓库默认名称，XXX替换成自己github用户名，此操作相当于关联一个远程库)
+git push -u origin master 把本地库的所有内容推送到远程，由于远程库是空的，我们第一次推送master分支时，加上了-u参数，
+Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。
+
+从远程仓库克隆
+git clone git@github.com:XXX/YYY.git（YYY是预先在github上添加的远程仓库）
+git支持ssh协议和https协议，https地址https://github.com/XXX/YYY.git，ssh访问速度最快
+
+分支管理
+1. 创建并切换开发分支 git checkout -b dev
+2. 查看当前分支 git branch
+3. 切换回主分支 git checkout master
+4. 合并分支到当前分支 git merge dev （合并dev分支到当前分支，当前是master分支）
+5. 删除dev分支 git branch -d dev
+当Git无法自动合并分支时，就必须首先解决冲突。解决冲突后，再提交，合并完成
