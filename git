@@ -4,10 +4,10 @@ $ git config --global user.name "xxx"
 $ git config --global user.email "xxx@xxx.com"
 2. 生成SSH密钥过程
 查看是否已经有了ssh密钥：cd ~/.ssh
-$ ssh-keygen -t rsa -C “XXX@XXX.com” 按3个回车，密码为空。(也可以指定密码和密钥的目录)
+$ ssh-keygen -t rsa -C “XXX@XXX.com” 指定密码和密钥的目录
 生成后会在用户目录下生成.ssh文件，里面包含两个文件：id_rsa和id_rsa.pub
 3. 添加ssh密钥
-ssh-agent bash，再输入ssh-add ~/.ssh/id_rsa
+输入ssh-add ~/.ssh/id_rsa
 4. github上设置公钥（id_rsa.pub）
 
 git命令
@@ -49,5 +49,5 @@ git commit -m "remove test.txt"
 2. 误删除
 git checkout -- test.txt：checkout其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”
 
-添加远程仓库
-
+添加远程仓库（github上先创建仓库，并配置好ssh）
+git remote add origin git@github.com:XXX/learngit.git (origin是远程仓库名称)
