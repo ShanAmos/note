@@ -1,0 +1,51 @@
+ZK的安装配置（windows）
+1. 下载zk安装包并解压，配置环境变量
+2. 配置zk的单机模式和集群模式（伪集群模式：用单机模拟多机情况）
+单机模式：
+拷贝一份zoo_sample.cfg命名为zoo.cfg
+配置信息：dataDir=C:\\data\\zookeeper   //镜像数据位置
+clientPort=2181  // 客户端连接的端口
+进入到bin目录，启动zkServer.cmd，这个脚本中会启动一个java进程，用jps命令查看
+再启动客户端zkCli.cmd-server 127.0.0.1:2181
+
+伪集群模式
+解压后的文件进入到bin目录的上一级，拷贝三份，分别命名为zookeeper1，zookeeper2，zookeeper3
+分别重命名zoo.cfg文件，配置信息如下：
+zookeeper1的zoo.cfg:
+dataDir=C:\\data\\zookeeper\\1
+clientPort=2181
+server.1=127.0.0.1:2888:3888  
+server.2=127.0.0.1:2889:3889  
+server.3=127.0.0.1:2890:3890
+
+zookeeper2的zoo.cfg:
+dataDir=C:\\data\\zookeeper\\2
+clientPort=2182
+server.1=127.0.0.1:2888:3888  
+server.2=127.0.0.1:2889:3889  
+server.3=127.0.0.1:2890:3890
+
+zookeeper3的zoo.cfg:
+dataDir=C:\\data\\zookeeper\\3
+clientPort=2183
+server.1=127.0.0.1:2888:3888  
+server.2=127.0.0.1:2889:3889  
+server.3=127.0.0.1:2890:3890
+
+分别进入到配置的镜像文件目录，如C:\\data\\zookeeper\\1，C:\\data\\zookeeper\\2和C:\\data\\zookeeper\\3文件夹中，分别创建
+myid文件（文件名为myid，没有后缀名），文件内容就是对应的1，2，3，即zoo.cfg里server.后数字
+最后分别启动zookeeper1，zookeeper2，zookeeper3下的zkServer.cmd
+刚启动第一个Zk时会不断报错，这是正常的，因为集群中其它的Zk还未起来，Zk集群之间的心跳检测未检测到其它Zk，等集群中所有的Zk都启动后，就不会报错了。
+
+KAFKA的安装配置（windows）
+1. 下载kafka http://kafka.apache.org/downloads.html。注意要下载二进制版本的
+2. 进入kafka的conf目录，编辑server.properties
+log.dirs=C:/tools/software/kafka_2.11-0.11.0.1/kafka-log  //kafka输出的日志目录
+zookeeper.connect=localhost:2181 //表示本地运行，Kafka会按照默认，在9092端口上运行，并连接zookeeper的默认端口：2181
+3. 进入bin目录启动kafka服务
+bin\windows\kafka-server-start.bat ..\..\config\server.properties 
+4. 测试
+创建主题（topic） bin\windows\kafka-server-start.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic linlin
+创建生产者（producer） bin\windows\kafka-concole-producer.bat --broker-list localhost:9092 --topic linlin
+创建消费者（consumer） bin\windows\kafka-concole-consumer.bat --zookeeper localhost:2181 --topic linlin
+然后在生产者窗口发送消息，消费者就可以接受到消息
