@@ -66,3 +66,28 @@ git支持ssh协议和https协议，https地址https://github.com/XXX/YYY.git，s
 4. 合并分支到当前分支 git merge dev （合并dev分支到当前分支，当前是master分支）
 5. 删除dev分支 git branch -d dev
 当Git无法自动合并分支时，就必须首先解决冲突。解决冲突后，再提交，合并完成
+
+分支管理策略
+git合并分支有两种模式：
+Fast forward模式，这种模式删除分支后会丢掉分支信息，也就看不出来曾经有过合并
+no-ff模式（禁用fast-forward模式）：git merge --no-ff -m "merge with no-ff" dev
+
+修复bug
+如果当前正在dev分支开发新功能，同时接到一个紧急bug需要从master分支上修改
+可以现在dev分支上执行git stash 把当前工作现场储存起来
+然后从master分支上创建临时分支，修改bug，然后合并到master分支，再切换回dev分支
+用 git stash pop恢复现场并删除stash
+
+新功能分支
+每个新功能最好都新建一个分支，如果功能取消，需要强制删除还没有被合并的分支
+git branch -D feature（feature是分支名）
+
+多人协作
+1. 首先，可以试图用git push origin branch-name推送自己的修改；
+2. 如果推送失败，则因为远程分支比你的本地更新，需要先用git pull试图合并；
+3. 如果合并有冲突，则解决冲突，并在本地提交；
+4. 没有冲突或者解决掉冲突后，再用git push origin branch-name推送就能成功！
+5. 如果git pull提示“no tracking information”，则说明本地分支和远程分支的链接关系没有创建，
+用命令git branch --set-upstream branch-name origin/branch-name。
+在本地创建和远程分支对应的分支，使用git checkout -b branch-name origin/branch-name
+(master分支在clone远程仓库时自动会创建，通常这个操作针对的是dev或test分支)
