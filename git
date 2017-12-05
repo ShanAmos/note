@@ -18,7 +18,7 @@ git add readme.txt
 git commit -m "append GPL"
 将修改提交到本地目录（add命令类似于选中某个文件，commit -m是提交，并写备注）
 3. 查看提交记录
-git log --pretty=oneline
+git log --pretty=oneline --abbrev-commit
 输出的前面一大串是commit id
 4. 回退版本（HEAD指的是当前版本）
 git reset --hard HEAD~100 回退100步
@@ -91,3 +91,14 @@ git branch -D feature（feature是分支名）
 用命令git branch --set-upstream branch-name origin/branch-name。
 在本地创建和远程分支对应的分支，使用git checkout -b branch-name origin/branch-name
 (master分支在clone远程仓库时自动会创建，通常这个操作针对的是dev或test分支)
+
+标签管理
+1. git tag v1.0 打标签，默认是给最新提交的那一次
+2. git tag v0.9 commitId 还可以给指定的commitId打标签
+3. git tag 查看标签列表
+4. git show v0.9 查看标签详细信息
+5. git tag -a v0.1 -m "version 0.1 released" 3628164 创建带说明的标签，-a表示指定标签名，-m指定说明文字
+6. git tag -d v0.1 删除本地标签
+7. git push origin v1.0 推送标签到远程 
+8. git push origin --tags 一次性推送全部未推送的本地标签
+9. 删除推送到远程的标签，需要先删除本地git tag -d v0.9 然后再推送 git push origin :refs/tags/v0.9
