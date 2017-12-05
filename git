@@ -1,3 +1,12 @@
+git设置
+1. 设置Git的user name和email：
+$ git config --global user.name "xxx"
+$ git config --global user.email "xxx@xxx.com"
+2. 生成SSH密钥过程
+查看是否已经有了ssh密钥：cd ~/.ssh
+$ ssh-keygen -t rsa -C “XXX@XXX.com” 按3个回车，密码为空。(也可以指定密码和密钥的目录)
+生成后会在用户目录下生成.ssh文件，里面包含两个文件：id_rsa和id_rsa.pub
+
 git命令
 1. 使用git bash创建一个目录（命令同linux）,然后进入这个目录中执行git init。当前这个目录即变成git可以管理的仓库（隐藏了一个.git文件。通过ls -ah查看）
 2. 创建一个文件 readme.txt，执行命令
