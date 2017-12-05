@@ -102,3 +102,6 @@ git branch -D feature（feature是分支名）
 7. git push origin v1.0 推送标签到远程 
 8. git push origin --tags 一次性推送全部未推送的本地标签
 9. 删除推送到远程的标签，需要先删除本地git tag -d v0.9 然后再推送 git push origin :refs/tags/v0.9
+
+忽略某些文件，需要在git仓库中添加文件.gitignore,文件中写入忽略的文件规则，如*.class,然后将.gitignore文件提交。
+接下来如果再有.class文件则不会提交到git
