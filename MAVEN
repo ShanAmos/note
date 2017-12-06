@@ -17,6 +17,7 @@ pom.xml中
 <version> 1. 0 -SNAPSHOT< /version > //版本
 <name> Maven Hello World Project < /name > //描述，对用户更友好的项目名称
 
+编译：结果会输出到target目录中
 mvn clean compile:编译src源文件
 mvn clean test:编译test测试文件
 compiler 插件默认只便宜1.3，所以需要在pom文件中修改配置
@@ -34,3 +35,40 @@ compiler 插件默认只便宜1.3，所以需要在pom文件中修改配置
       </plugins>
 </build>
 <project>
+
+打包和运行
+mvn clean package:打成相应的jar,war输出到target中，打包的类型是在pom里面定义的
+mvn clean install:打成的包输出到本地仓库中，本地的其他maven项目就可以直接使用
+顺序是 compile-test-package-install
+默认打包生成的jar是不能直接运行的，因为带有main方法的类信息不会添加到manifest中，为了生成可执行的jar文件，需要借助maven-shade-plugin插件
+< plug in>
+      < groupid > org . apache. maven. plug ins< /groupid >
+      < artifact Id >maven-shade-plugin < /artifact Id>
+      <version> 1. 2 .1 </version>
+      <executions>
+            <execution>
+            < phase > package < /phase >
+            <goals >
+                  < goal >shade< /goal >
+            </goals>
+            <configuration>
+                  <transformers >
+                  < transformer implementation= •org. apache. maven. plug ins. shade. resource.
+                        Mani festResourceTransformer • >
+                  <mainClass > com. juvenxu. mvnbook. helloworld. Helloworld < /mainClass >
+                  </transformer>
+                  </transformers>
+            </configuration>
+            < execution >
+      </executions>
+< /plugin >
+然后再manifest.mf中包含这样一条信息
+Main-Class: com. juvenxu. mvnbook. helloworld. HelloWorld
+再在项目根目录执行 java-jar target\ hello-world-1. 0-SNAPSHOT. jar 
+
+依赖范围：
+compile(编译依赖范围，默认，对编译，测试，运行都有效，如spring)
+test(测试依赖范围，只对测试有效，如JUnit)
+provided(已提供依赖范围，编译和测试有效，运行无效，如servlet-api)
+runtime(运行依赖范围，测试和运行有效，编译无效，如JDBC驱动)
+
