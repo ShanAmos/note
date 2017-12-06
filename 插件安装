@@ -1,0 +1,36 @@
+1. 安装JDK，设置环境变量 JAVA_HOME,path加上%JAVA_HOME%\bin; java -version看是否安装成功
+2. 安装tomcat,设置环境变量 CATALINA_HOME,path加上%CATALINA_HOME%\bin; 启动后访问localhost看是否安装成功
+3. 安装maven,设置环境变量 MAVEN_HOME,path加上%MAVEN_HOME%\bin; mvn -v看是否安装成功
+4. eclipse设置：
+general-appearance-colors and fonts-basic-text font设置字体
+general-workspace-text file encoding 设置编码格式
+java-editor-content assist-auto activation triggers for java 补全a~z设置代码自动提示
+java-editor-save actions 选中save后自动格式化代码
+java-installed JREs 选择安装的jdk目录
+java-code style-code template 导入注释规范和代码规范
+maven-installations-add 添加外部自己装的maven
+maven-user settings 选择自己的setting.xml目录和本地maven仓库
+server-runtime environments-add 添加自己安装的tomcat
+web-css file/js file/jsp file 设置编码格式
+
+5. eclipse插件安装
+反编译插件jad
+将net.sf.jadclipse_3.3.0.jar拷贝到eclipse包下的plugins文件夹下
+将jad.exe拷贝到当前使用jdk的bin目录下
+重启eclipse
+
+sonar插件
+eclipse-help-eclipse marketplace查找sonar lint插件并安装
+项目右键-bind to a sonarqube project绑定到一个sonar服务器上
+windows-show view-选中sonar issue/sonar rule/sonarqube server加入到视图中
+在sonarqube server视图中可以对项目进行分析
+
+ermaster插件:ER Master 是一个用于设计ER模型图的Eclipse插件。提供的功能包括：从数据库导入关系生成ER图，导出设计图，导出DDL数据定义语句等
+下载插件https://sourceforge.net/projects/ermaster/files/latest/download
+拷贝到eclipse-plugin文件夹中，重启eclipse
+新建-ermaster-选中数据库，然后可以画er图，并且可以导出ddl和生成java bean
+
+log4E插件:可以一键生成日志输出，并且可替换system.out的输出
+下载log4E help-install new software 选择 http://log4e.jayefem.de/update，重启eclipse
+windows-preference-log4E,设置日志级别，输出格式，和风格
+
