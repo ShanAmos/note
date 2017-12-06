@@ -9,3 +9,28 @@ settings.xml proxies节点用来设置代理
       <port>80</port>
       <nonProxyHosts>local.net|some.host.com</nonProxyHosts> //指定哪些主机不需要代理，多个用|分割，支持通配符
 </proxy>
+
+pom.xml中
+< model Version > 4. 0. 0 < /model Version >  //对于Maven3来说,必须是4.0
+<groupid >com. juvenxu.mvnbook < /groupid > //com.公司名.项目名
+<artifact Id >hello-world< /artifact Id> //jar包名
+<version> 1. 0 -SNAPSHOT< /version > //版本
+<name> Maven Hello World Project < /name > //描述，对用户更友好的项目名称
+
+mvn clean compile:编译src源文件
+mvn clean test:编译test测试文件
+compiler 插件默认只便宜1.3，所以需要在pom文件中修改配置
+<project>
+<build>
+      <plugins>
+            <plugin>
+                  <groupId> erg. apache. maven. plugins</groupid>
+                  <artifact Id> maven-compiler-plug in</artifactid>
+                  <configuration>
+                        <source> 1. 5</source>
+                        <target> 1. 5 </target>
+                  </configuration>
+            </plugin>
+      </plugins>
+</build>
+<project>
