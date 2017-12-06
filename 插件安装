@@ -38,3 +38,9 @@ windows-preference-log4E,设置日志级别，输出格式，和风格
 下载插件：Help->Install New Software 选择https://p3c.alibaba.com/plugin/eclipse/update
 安装完成后，面板会多两个按钮，一个是扫描按钮，一个是切换语言按钮
 选中项目右键-阿里编码规约扫描 扫描结果会出现在p3c results视图中
+
+ mybatis generator插件安装
+ 下载插件：help-eclipse market-mybatis
+ new-other-mybatis选择需要生成的项目目录，然后会生成一个generatorConfig.xml
+ 配置generatorConfig.xml，指定pojo,mapper文件的位置
+ 使用时候，右键generatorConfig.xml，generate
