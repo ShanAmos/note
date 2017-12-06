@@ -34,3 +34,7 @@ log4E插件:可以一键生成日志输出，并且可替换system.out的输出
 下载log4E help-install new software 选择 http://log4e.jayefem.de/update，重启eclipse
 windows-preference-log4E,设置日志级别，输出格式，和风格
 
+阿里巴巴开发规范插件：
+下载插件：Help->Install New Software 选择https://p3c.alibaba.com/plugin/eclipse/update
+安装完成后，面板会多两个按钮，一个是扫描按钮，一个是切换语言按钮
+选中项目右键-阿里编码规约扫描 扫描结果会出现在p3c results视图中
