@@ -1,0 +1,11 @@
+settings.xml proxies节点用来设置代理
+<proxy>
+      <id>optional</id>
+      <active>true</active>  //true表示激活，多个proxy时，第一个激活的生效
+      <protocol>http</protocol>
+      <username>proxyuser</username>
+      <password>proxypass</password>
+      <host>proxy.host.net</host>
+      <port>80</port>
+      <nonProxyHosts>local.net|some.host.com</nonProxyHosts> //指定哪些主机不需要代理，多个用|分割，支持通配符
+</proxy>
