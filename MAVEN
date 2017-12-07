@@ -1,58 +1,7 @@
-maven聚合和继承
-聚合：一次性构建多个项目，而不用分别进入不同项目中，执行mvn命令
-新建一个聚合的项目：
-<modelVersion >4. 0. 0 < /modelVersion> 
-<groupld > com. juvenxu. mvnbook. accounL </groupid > 
-<artifactId> account-aggregator </artifact Id> 
-<version> 1. 0. 0-SNAPSHOT </version> 
-<packaging >pom< /packaging> // 必须为pom型，不指定时默认是jar 
-<name> Account Aggregacor </name> 
-<modules> //所聚合的子模块 
-      <module>account-email</module> 
-      <module>account-persist </module>
-</modules>
-
-继承：
-创建父模块
-<modelVersion >4 .O.O < /modelVersion> 
-<groupid > com. juvenxu. mvnbook. account</groupld > 
-<artifactId >account-pa.rent</artifactId> 
-<version > 1. 0. 0 -SNAPSHOT</version> 
-<packaging> pom< /packaging>  //必须为pom型
-<name > Account Parent </name> 
-
-子模块中继承父模块
-<parent>
-<groupId> com. juvenxu. mvnbook. account </groupId >
-<artifactId >account-parent</artifactId>
-<version> l. O. 0-SNAPSHOT </version >
-<relativePath> .. /account-parent/pom. xml </relativePath >
-</parent>
-<artifactId >account-email</artifactId> //子模块不用再定义groupId和version,直接从父模块继承，除非要显示声明
-<name>Account Email</name>
-
-父模块中定义dependencyManagement
-父模块直接定义dependencies，子模块就可以继承，但是这样有个问题，就是子模块不一定需要继承父模块的所有依赖。
-通过dependencyManagement可以在父模块中约束子模块继承的范围和版本，子模块再声明依赖的使用，groupId和artifactId即可
-父模块中：
-<properties>
-      <springframework.version>2.5.6</springframework.version>
-      <junit.version>4.7</junit.version>
-</properties>
-<dependencyManagement>
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${springframework.version}</version>
+<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc14</artifactId>
+			<version>${oracle.driver.version}</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/ojdbc14-10.2.0.4.0.jar</systemPath>
 		</dependency>
-	</dependencies>
-</dependencyManagement>
-
-子模块中：
-<dependencies>
-	<dependency>
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-core</artifactId>		
-	</dependency>
-</dependencies>
