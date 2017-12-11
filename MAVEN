@@ -63,7 +63,7 @@ springboot热部署：spring-boot-devtools，其深层原理是使用了两个Cl
        </dependencies>
 </plugin>
 
-2. applitaion.yaml中配置
+2. applitaion.yaml中配置（可选）
 spring:
     devtools:
         restart:
@@ -103,3 +103,121 @@ public class NeoProperties {
 
 2. 页面引入：
 <link th:href="@{/webjars/bootstrap/3.3.6/dist/css/bootstrap.css}" rel="stylesheet"></link>
+
+springboot中redis使用
+1 引入redis启动器
+<dependency>  
+    <groupId>org.springframework.boot</groupId>  
+    <artifactId>spring-boot-starter-redis</artifactId>  
+</dependency> 
+
+2. 添加properties配置
+# REDIS (RedisProperties)
+# Redis数据库索引（默认为0）
+spring.redis.database=0  
+# Redis服务器地址
+spring.redis.host=192.168.0.58
+# Redis服务器连接端口
+spring.redis.port=6379  
+# Redis服务器连接密码（默认为空）
+spring.redis.password=  
+# 连接池最大连接数（使用负值表示没有限制）
+spring.redis.pool.max-active=8  
+# 连接池最大阻塞等待时间（使用负值表示没有限制）
+spring.redis.pool.max-wait=-1  
+# 连接池中的最大空闲连接
+spring.redis.pool.max-idle=8  
+# 连接池中的最小空闲连接
+spring.redis.pool.min-idle=0  
+# 连接超时时间（毫秒）
+spring.redis.timeout=0 
+
+3. 添加cache配置类（使用@Configuration和@Bean代替xml中配置<beans>和<bean>）
+@Configuration
+@EnableCaching
+public class RedisConfig extends CachingConfigurerSupport{
+    
+    @Bean
+    public KeyGenerator keyGenerator() {
+        return new KeyGenerator() {
+            @Override
+            public Object generate(Object target, Method method, Object... params) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(target.getClass().getName());
+                sb.append(method.getName());
+                for (Object obj : params) {
+                    sb.append(obj.toString());
+                }
+                return sb.toString();
+            }
+        };
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Bean
+    public CacheManager cacheManager(RedisTemplate redisTemplate) {
+        RedisCacheManager rcm = new RedisCacheManager(redisTemplate);
+        //设置缓存过期时间
+        //rcm.setDefaultExpiration(60);//秒
+        return rcm;
+    }
+    
+    @Bean
+    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory) {
+        StringRedisTemplate template = new StringRedisTemplate(factory);
+        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+        ObjectMapper om = new ObjectMapper();
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        jackson2JsonRedisSerializer.setObjectMapper(om);
+        template.setValueSerializer(jackson2JsonRedisSerializer);
+        template.afterPropertiesSet();
+        return template;
+    }
+
+}
+
+4. 手动方式使用缓存
+   @RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(Application.class)
+public class TestRedis {
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+    
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Test
+    public void test() throws Exception {
+        stringRedisTemplate.opsForValue().set("aaa", "111");
+        Assert.assertEquals("111", stringRedisTemplate.opsForValue().get("aaa"));
+    }
+    
+    @Test
+    public void testObj() throws Exception {
+        User user=new User("aa@126.com", "aa", "aa123456", "aa","123");
+        ValueOperations<String, User> operations=redisTemplate.opsForValue();
+        operations.set("com.neox", user);
+        operations.set("com.neo.f", user,1,TimeUnit.SECONDS);
+        Thread.sleep(1000);
+        //redisTemplate.delete("com.neo.f");
+        boolean exists=redisTemplate.hasKey("com.neo.f");
+        if(exists){
+            System.out.println("exists is true");
+        }else{
+            System.out.println("exists is false");
+        }
+       // Assert.assertEquals("aa", operations.get("com.neo.f").getUserName());
+    }
+}
+
+5. 查找数据库时，自动使用缓存（主要是@cacheable注解，value是redis的key）
+@RequestMapping("/getUser")
+@Cacheable(value="user-key")
+public User getUser() {
+    User user=userRepository.findByUserName("aa");
+    System.out.println("若下面没出现“无缓存的时候调用”字样且能打印出数据表示测试成功");  
+    return user;
+}
+  
