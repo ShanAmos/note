@@ -221,3 +221,18 @@ public User getUser() {
     return user;
 }
   
+分布式系统中session托管到缓存实现session共享
+1. 引入依赖
+<dependency>
+    <groupId>org.springframework.session</groupId>
+    <artifactId>spring-session-data-redis</artifactId>
+</dependency>
+
+2. session配置
+@Configuration
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 86400*30)
+//设置sessions失效时间，引入Redis Session之后，原Boot的server.session.timeout属性不再生效
+public class SessionConfig {
+}
+
+3. 在另一个项目中也配置上面两步，实现session共享
