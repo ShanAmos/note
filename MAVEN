@@ -290,3 +290,6 @@ public interface UserMapper {
     void delete(Long id);
 
 }
+
+极简xml版
+1. 配置：pom.xml保持不变，application.properties新增如下配置
