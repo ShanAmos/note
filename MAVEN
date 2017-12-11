@@ -1,3 +1,4 @@
+http://www.cnblogs.com/ityouknow/p/6037431.html
 springboot:
 mybatis-generator-maven-plugin插件：用于自动生成mapper和pojo
 1. pom.xml中添加插件依赖
