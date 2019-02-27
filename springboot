@@ -28,3 +28,24 @@ response：抛出异常的类
 
 https://www.jianshu.com/p/dc0410558fc9
 https://www.cnblogs.com/springsource/p/9687070.html
+
+//不用传统的锁机制来保证单例线程安全的方法，
+import java.util.concurrent.atomic.AtomicReference;
+
+public class Singleton {
+	private static final AtomicReference<Singleton> INSTANCE = new AtomicReference<>();
+	private Singleton() {
+	}
+	public static Singleton getInstance() {
+		for(;;) {
+			Singleton singleton = INSTANCE.get();
+			if(null != singleton) {
+				return singleton;
+			}
+			singleton = new Singleton();
+			if(INSTANCE.compareAndSet(null, singleton)) {
+				return singleton;
+			}
+		}
+	}
+}
